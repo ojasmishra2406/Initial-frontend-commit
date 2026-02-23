@@ -256,7 +256,7 @@ function AdminDashboard() {
                   <tr key={item._id} style={{ borderBottom: '1px solid #dee2e6' }}>
                     <td style={{ padding: '12px' }}>{item.name}</td>
                     <td style={{ padding: '12px', textTransform: 'capitalize' }}>{item.category}</td>
-                    <td style={{ padding: '12px' }}>${item.basePrice.toFixed(2)}</td>
+                    <td style={{ padding: '12px' }}>₹{item.basePrice.toFixed(2)}</td>
                     <td style={{ padding: '12px' }}>
                       <span
                         style={{
@@ -430,7 +430,7 @@ function AdminDashboard() {
                           )}
                         </div>
                         <div style={{ fontWeight: 'bold', color: '#007bff' }}>
-                          ${item.totalPrice.toFixed(2)}
+                          ₹{item.totalPrice.toFixed(2)}
                         </div>
                       </div>
                     ))}
@@ -453,7 +453,7 @@ function AdminDashboard() {
                   >
                     <h3 style={{ margin: 0 }}>Total Amount:</h3>
                     <h3 style={{ margin: 0, color: '#007bff', fontSize: '24px' }}>
-                      ${order.totalAmount.toFixed(2)}
+                      ₹{order.totalAmount.toFixed(2)}
                     </h3>
                   </div>
                 </div>

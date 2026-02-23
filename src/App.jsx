@@ -14,8 +14,16 @@ import Signup from './pages/Signup';
 import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
+  // Debug: Check if Google Client ID is loaded
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  console.log('🔑 [DEBUG] Google Client ID:', googleClientId ? `${googleClientId.substring(0, 10)}...` : 'NOT LOADED');
+  
+  if (!googleClientId) {
+    console.error('❌ VITE_GOOGLE_CLIENT_ID is not set in environment variables!');
+  }
+
   return (
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+    <GoogleOAuthProvider clientId={googleClientId || ''}>
       <AuthProvider>
         <CartProvider>
           <div className="app">
