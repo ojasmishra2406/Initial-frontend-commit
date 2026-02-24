@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../context/AuthContext';
-import api from '../api/axios';
 
 function Signup() {
   const navigate = useNavigate();
-  const { signup } = useAuth();
+  const { signup, googleLogin } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -37,22 +36,12 @@ function Signup() {
     }
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
+  const handleGoogleSuccess = async ({ credential }) => {
     setError('');
     setLoading(true);
-
     try {
-      const response = await api.post('/auth/google', {
-        credential: credentialResponse.credential,
-      });
-
-      // Store token and user data
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      
-      // Navigate to menu
+      await googleLogin(credential);
       navigate('/menu');
-      window.location.reload(); // Reload to update auth context
     } catch (err) {
       setError(err.response?.data?.message || 'Google sign-up failed');
     } finally {

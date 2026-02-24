@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useContext } from 'react';
+import { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import * as authService from '../services/authService';
 
 const AuthContext = createContext();
@@ -27,22 +27,28 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const login = async (credentials) => {
-    const data = await authService.login(credentials);
+  // Shared helper to commit auth state after any login/signup method
+  const commitAuth = useCallback((data) => {
     setToken(data.token);
     setUser(data.user);
     authService.setAuthToken(data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
     return data;
+  }, []);
+
+  const login = async (credentials) => {
+    const data = await authService.login(credentials);
+    return commitAuth(data);
   };
 
   const signup = async (userData) => {
     const data = await authService.signup(userData);
-    setToken(data.token);
-    setUser(data.user);
-    authService.setAuthToken(data.token);
-    localStorage.setItem('user', JSON.stringify(data.user));
-    return data;
+    return commitAuth(data);
+  };
+
+  const googleLogin = async (credential) => {
+    const data = await authService.googleLogin(credential);
+    return commitAuth(data);
   };
 
   const logout = () => {
@@ -58,6 +64,7 @@ export const AuthProvider = ({ children }) => {
     loading,
     login,
     signup,
+    googleLogin,
     logout,
     isAuthenticated: !!token,
   };
